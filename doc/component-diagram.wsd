@@ -1,0 +1,23 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Usuário", "quem vai usar o sistema")
+
+Boundary(cashFlow, "Contexto do Fluxo de Caixa") {
+    Component(entryController, "Controlador Lançamentos", "AspNet Core Web API (C# 8)", "permite cadastrar, atualizar, listar e remover um lançamento")
+
+    Component(commandHandler, "Manipuladores dos Comandos", "AspNet Core Web API (C# 8)", "permite executar os comandos dos lançamentos")
+
+    Component(queryHandler, "Manipuladores das Consultas", "AspNet Core Web API (C# 8)", "permite consultar os lançamentos")
+    
+    ComponentDb(cashFlowDb, "Banco de Dados", "SQLite", "onde os dados são registrados")
+}
+
+Rel_D(user, entryController, "chama")
+Rel_D(entryController, commandHandler, "chama")
+Rel_D(entryController, queryHandler, "chama")
+Rel_D(queryHandler, cashFlowDb, "chama")
+Rel_D(commandHandler, cashFlowDb, "chama")
+
+@enduml

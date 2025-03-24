@@ -1,0 +1,49 @@
+@startuml
+
+namespace Domain {
+
+    namespace Entities {
+        
+        abstract class Entity {
+            + Id: Guid
+            + Errors: IList<DomainNotification>
+
+            abstract Validate()
+        }
+
+        class Entry {
+            + Date: DateTime
+            + Description: string
+            + Value: decimal
+            + Type: EntryType
+        }
+    }
+
+    namespace Enums {
+
+        enum EntryType {
+            Debit = 1
+            Credit = 2
+        }
+    }
+
+    namespace Interfaces {
+        
+        class DomainNotification {
+            + Code: int
+            + Title: string
+            + Message: string
+        }
+
+        note top of DomainNotification 
+            Deve ser uma classe **sealed**
+        endnote 
+    }
+}
+
+Domain.Entities.Entity <|-- Domain.Entities.Entry 
+Domain.Entities.Entity o-- Domain.Interfaces.DomainNotification
+
+Domain.Enums.EntryType --> Domain.Entities.Entry
+
+@enduml

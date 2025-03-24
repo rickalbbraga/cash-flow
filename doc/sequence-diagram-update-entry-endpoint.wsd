@@ -1,0 +1,70 @@
+@startuml
+
+
+actor "Usuário" as user
+participant "API de lançamentos" as api
+database "Banco de Dados" as db
+
+user -> api: Endpoint para atualizar \nlançamento
+activate api #LightGray
+
+api -> api
+activate api #grey
+
+note right 
+    Validações de domínio:
+    - Comando é válido?
+end note
+
+alt Failure 
+    api -> user: Mensagem de erro
+end
+
+deactivate api
+
+api -> db: Buscar lançamento pelo **id**
+activate db #LightGray
+db --> api: Retorno
+deactivate db
+
+api -> api
+activate api #grey
+
+note right 
+    Validações de domínio:
+    - Lançamento foi recuperado?
+end note
+
+alt Failure 
+    api -> user: Mensagem de erro
+end
+
+deactivate api
+
+api -> api
+activate api #grey
+
+note right 
+    - Atualiza o lançamento com as informações novas
+    
+    Validações de domínio:
+    - Lançamento atualizado não contém erro? 
+end note
+
+alt Failure 
+    api -> user: Mensagem de erro
+end
+
+deactivate api
+
+api -> db: Atualiza lançamento no banco de dados
+activate db #LightGray
+db --> api: Retorno
+deactivate db
+api -> api: Monta resposta para cliente
+
+alt Success 
+    api -> user: Mensagem de sucesso
+end
+
+@enduml

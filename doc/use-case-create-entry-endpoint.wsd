@@ -1,0 +1,28 @@
+@startuml
+
+actor user as "Usuário"
+
+json JSON {
+   "date":"2025-03-23",
+   "description":"Lançamento teste",
+   "value":25,
+   "type": ["1 - debit", "2 - credit"]
+}
+
+actor userResponse as "Usuário"
+
+package CreateEntryEndpoint {
+    usecase createEntry as "Criar usuário"
+    usecase domainValidation as "Validações de domínio"
+    usecase dbInsert as "Inserir no banco" 
+    usecase result as "Monta resposta para cliente"
+}
+
+user --> createEntry
+createEntry ..> domainValidation: <<include>>
+domainValidation ..> userResponse: <<exclude>>
+domainValidation ..> dbInsert: <<exclude>>
+dbInsert ..> result: <<include>>
+result ..> userResponse: <<include>>
+
+@enduml

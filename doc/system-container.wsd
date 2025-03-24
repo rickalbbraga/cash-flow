@@ -1,0 +1,16 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Usuário", "quem vai usar o sistema")
+
+Boundary(cashFlow, "Contexto do Fluxo de Caixa") {
+    Container(cashFlowApi, "API Fluxo de Caixa", "AspNet Core Web API (C# 8)", "onde pode ser registrado os lançamentos diário")
+    
+    ContainerDb(cashFlowDb, "Banco de Dados", "SQLite", "onde os dados são registrados")
+}
+
+Rel_D(user, cashFlowApi, "usa")
+Rel_D(cashFlowApi, cashFlowDb, "usa")
+
+@enduml
